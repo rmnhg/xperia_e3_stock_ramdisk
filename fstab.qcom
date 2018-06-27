@@ -1,0 +1,28 @@
+# Android fstab file.
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+#TODO: Add 'check' as fs_mgr_flags with data partition.
+# Currently we dont have e2fsck compiled. So fs check would failed.
+
+#<src>                                                <mnt_point>  <type>  <mnt_flags and options>                     <fs_mgr_flags>
+# [Arima5911][34881][bozhi_lin] enable factory reset feature in S1 20140314 begin
+# /dev/block/platform/msm_sdcc.1/by-name/system         /system      ext4    ro,barrier=1                                wait
+# [Arima5911][34881][bozhi_lin] 20140314 end
+
+# << 2014/06/05-EricLin, B[All][Main][S1][] File system encryption user footer solution.
+#/dev/block/platform/msm_sdcc.1/by-name/userdata       /data        ext4    nosuid,nodev,barrier=1,noauto_da_alloc      wait,check,encryptable=miscta
+/dev/block/platform/msm_sdcc.1/by-name/userdata       /data        ext4    nosuid,nodev,barrier=1,noauto_da_alloc      wait,check,encryptable=footer
+# >> 2014/06/05-EricLin,
+#//<2014/04/25- 36895 -jackxu,feature18649 Move apps to external SD card for E2(ref in-house 17598)
+/devices/msm_sdcc.2/mmc_host                 /storage/sdcard1         vfat    nosuid,nodev                    wait,voldmanaged=sdcard1:auto,noemulatedsd
+#//>2014/04/25- 36895 -jackxu,feature18649 Move apps to external SD card for E2(ref in-house 17598)
+
+# [All][Main][LCM][DMS][40541][StevenChen] Fix OTG connection problem of multiple LUN device 2014/07/02 begin
+# [Arima5908][32767][StevenChen] Enable USB OTG mass storage function 2014/01/08 begin
+/devices/platform/msm_hsusb_host                 auto         usbdisk    defaults                 voldmanaged=usbdisk:auto
+# [Arima5908][32767][StevenChen] Enable USB OTG mass storage function 2014/01/08 end
+# [All][Main][LCM][DMS][40541][StevenChen] Fix OTG connection problem of multiple LUN device 2014/07/02 end
+
+#/dev/block/mmcblk0p11         /system      ext4    ro,barrier=1                                wait
+#/dev/block/mmcblk0p12       /data        ext4    nosuid,nodev,barrier=1,noauto_da_alloc      wait,check,encryptable=footer
